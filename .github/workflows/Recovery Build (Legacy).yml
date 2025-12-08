@@ -1,55 +1,55 @@
-name: Recovery Build (Legacy)
+名字: Recovery Build (Legacy)
 
 on:
   workflow_dispatch:
     inputs:
       MANIFEST_URL:
-        description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
+        描述: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
         required: true
-        default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni'
+        默认: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni'
       MANIFEST_BRANCH:
-        description: 'MANIFEST_BRANCH'
+        描述: 'MANIFEST_BRANCH'
         required: true
-        default: 'twrp-7.1'
+        默认: 'twrp-7.1'
       DEVICE_TREE_URL:
-        description: 'DEVICE_TREE_URL'
+        描述: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/ycly2333/android_device_EEBBK_H3000S-twrp'
+        默认: 'https://github.com/ycly2333/android_device_EEBBK_H3000S-twrp'
       DEVICE_TREE_BRANCH:
-        description: 'DEVICE_TREE_BRANCH'
+        描述: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'twrp-7.1'
+        默认: 'twrp-7.1'
       DEVICE_PATH:
-        description: 'DEVICE_PATH'
+        描述: 'DEVICE_PATH'
         required: true
-        default: 'device/EEBBK/H3000S'
+        默认: 'device/EEBBK/H3000S'
       COMMON_TREE_URL:
-        description: 'COMMON_TREE_URL (if no common tree, leave blank)'
+        描述: 'COMMON_TREE_URL (if no common tree, leave blank)'
         required: false
       COMMON_PATH:
-        description: 'COMMON_PATH (if no common tree, leave blank)'
+        描述: 'COMMON_PATH (if no common tree, leave blank)'
         required: false
       DEVICE_NAME:
-        description: 'DEVICE_NAME'
+        描述: 'DEVICE_NAME'
         required: true
-        default: 'H3000S'
+        默认: 'H3000S'
       MAKEFILE_NAME:
-        description: 'MAKEFILE_NAME'
+        描述: 'MAKEFILE_NAME'
         required: true
-        default: 'omni_H3000S'
+        默认: 'omni_H3000S'
       BUILD_TARGET:
-        description: 'BUILD_TARGET'
+        描述: 'BUILD_TARGET'
         required: true
-        default: 'recovery'
+        默认: 'recovery'
 
 jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04  # 更新这里
     permissions:
       contents: write
     steps:
-    - name: Display Run Parameters
+    - 名字: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
         echo "Manifest URL: ${{ github.event.inputs.MANIFEST_URL }}"
@@ -63,15 +63,15 @@ jobs:
         echo "::endgroup::"
 
     # You might want to Checkout your repo first, but not mandatory
-    - name: Check Out
+    - 名字: Check Out
       uses: actions/checkout@v4
 
     # Cleanup The Actions Workspace Using Custom Composite Run Actions
-    - name: Cleanup
+    - 名字: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
       # That's it! Now use your normal steps
 
-    - name: Prepare the environment
+    - 名字: Prepare the environment
       run: |
         sudo apt update && sudo apt upgrade -y
         DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
@@ -82,13 +82,13 @@ jobs:
             libwxgtk3.0-gtk3-dev libxml2 lzop pngcrush schedtool squashfs-tools \
             imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev libncurses5 python3 tar
 
-    - name: Install OpenJDK
+    - 名字: Install OpenJDK
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '11'
 
-    - name: Setup SSH Keys
+    - 名字: Setup SSH Keys
       if: ${{ startsWith(github.event.inputs.MANIFEST_URL, 'git@github.com') || 
           startsWith(github.event.inputs.DEVICE_TREE_URL, 'git@github.com') ||
           startsWith(github.event.inputs.COMMON_TREE_URL, 'git@github.com') }}
@@ -97,7 +97,7 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Install repo
+    - 名字: Install repo
       run: |
         mkdir ~/bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo

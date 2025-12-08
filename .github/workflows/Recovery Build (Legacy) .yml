@@ -42,10 +42,11 @@ on:
         required: true
         default: 'recovery'
 
+
 jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-22.04  # 更新这里
+    runs-on: ubuntu-22.04  
     permissions:
       contents: write
     steps:

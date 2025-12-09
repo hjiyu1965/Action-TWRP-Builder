@@ -121,15 +121,18 @@ jobs:
       working-directory: workspace
 
     - name: Clone device tree
-  run: |
-    git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
-  working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-  
+      run: |
+        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
     - name: Clone common tree
-  if: ${{ github.event.inputs.COMMON_TREE_URL && github.event.inputs.COMMON_PATH }}
-  run: |
-    git clone "${{ github.event.inputs.COMMON_TREE_URL }}" -b "${{ github.event.inputs.DEVICE_TREE_BRANCH }}" "${{ github.event.inputs.COMMON_PATH }}"
-  working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      if: |
+        github.event.inputs.COMMON_TREE_URL != null
+        && github.event.inputs.COMMON_PATH != null
+      run: |
+        git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
     - name: Sync Device Dependencies
   run: |
     bash ${GITHUB_WORKSPACE}/scripts/convert.sh ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
